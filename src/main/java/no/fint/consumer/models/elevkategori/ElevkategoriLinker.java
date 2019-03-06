@@ -36,9 +36,9 @@ public class ElevkategoriLinker extends FintLinker<ElevkategoriResource> {
         if (!isNull(elevkategori.getSystemId()) && !isEmpty(elevkategori.getSystemId().getIdentifikatorverdi())) {
             return createHrefWithId(elevkategori.getSystemId().getIdentifikatorverdi(), "systemid");
         }
-        
+
         return null;
     }
-    
+
 }
 

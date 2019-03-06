@@ -3,9 +3,7 @@ package no.fint.consumer.models.fravarstype;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
 import lombok.extern.slf4j.Slf4j;
-
 import no.fint.cache.CacheService;
 import no.fint.consumer.config.Constants;
 import no.fint.consumer.config.ConsumerProps;
@@ -13,8 +11,10 @@ import no.fint.consumer.event.ConsumerEventUtil;
 import no.fint.event.model.Event;
 import no.fint.event.model.ResponseStatus;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
+import no.fint.model.resource.utdanning.kodeverk.FravarstypeResource;
+import no.fint.model.utdanning.kodeverk.Fravarstype;
+import no.fint.model.utdanning.kodeverk.KodeverkActions;
 import no.fint.relations.FintResourceCompatibility;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,10 +23,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
-
-import no.fint.model.utdanning.kodeverk.Fravarstype;
-import no.fint.model.resource.utdanning.kodeverk.FravarstypeResource;
-import no.fint.model.utdanning.kodeverk.KodeverkActions;
 
 @Slf4j
 @Service
@@ -71,12 +67,12 @@ public class FravarstypeCacheService extends CacheService<FravarstypeResource> {
     }
 
     public void rebuildCache(String orgId) {
-		flush(orgId);
-		populateCache(orgId);
-	}
+        flush(orgId);
+        populateCache(orgId);
+    }
 
     private void populateCache(String orgId) {
-		log.info("Populating Fravarstype cache for {}", orgId);
+        log.info("Populating Fravarstype cache for {}", orgId);
         Event event = new Event(orgId, Constants.COMPONENT, KodeverkActions.GET_ALL_FRAVARSTYPE, Constants.CACHE_SERVICE);
         consumerEventUtil.send(event);
     }
@@ -92,7 +88,7 @@ public class FravarstypeCacheService extends CacheService<FravarstypeResource> {
     }
 
 
-	@Override
+    @Override
     public void onAction(Event event) {
         List<FravarstypeResource> data;
         if (checkFintResourceCompatibility && fintResourceCompatibility.isFintResourceData(event.getData())) {
