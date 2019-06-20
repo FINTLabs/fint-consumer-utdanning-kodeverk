@@ -42,7 +42,7 @@ spec:
         - env:
             - {name: TZ, value: Europe/Oslo}
             - {name: JAVA_TOOL_OPTIONS, value: '-XX:+ExitOnOutOfMemoryError -Xmx2G -verbose:gc'}
-            - {name: fint.audit.mongo.databasename, value: fint-audit}
+            - {name: fint.audit.mongo.databasename, value: fint-audit-beta}
             - name: fint.audit.mongo.connection-string
               valueFrom:
                 secretKeyRef: {key: mongodb, name: fint-audit}
@@ -87,7 +87,7 @@ spec:
         - env:
             - {name: TZ, value: Europe/Oslo}
             - {name: JAVA_TOOL_OPTIONS, value: '-XX:+ExitOnOutOfMemoryError -Xmx2G -verbose:gc'}
-            - {name: fint.audit.mongo.databasename, value: fint-audit}
+            - {name: fint.audit.mongo.databasename, value: fint-audit-beta}
             - name: fint.audit.mongo.connection-string
               valueFrom:
                 secretKeyRef: {key: mongodb, name: fint-audit}
