@@ -36,9 +36,9 @@ public class SkoleeiertypeLinker extends FintLinker<SkoleeiertypeResource> {
         if (!isNull(skoleeiertype.getSystemId()) && !isEmpty(skoleeiertype.getSystemId().getIdentifikatorverdi())) {
             return createHrefWithId(skoleeiertype.getSystemId().getIdentifikatorverdi(), "systemid");
         }
-
+        
         return null;
     }
-
+    
 }
 

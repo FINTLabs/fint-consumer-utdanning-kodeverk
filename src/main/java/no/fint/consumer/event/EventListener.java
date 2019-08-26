@@ -3,16 +3,15 @@ package no.fint.consumer.event;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.audit.FintAuditService;
 import no.fint.cache.CacheService;
+import no.fint.consumer.config.Constants;
 import no.fint.consumer.config.ConsumerProps;
 import no.fint.consumer.status.StatusCache;
-import no.fint.event.model.Event;
-import no.fint.event.model.Operation;
-import no.fint.event.model.ResponseStatus;
-import no.fint.event.model.Status;
+import no.fint.event.model.*;
 import no.fint.events.FintEventListener;
 import no.fint.events.FintEvents;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -50,6 +49,13 @@ public class EventListener implements FintEventListener {
         log.info("Upstream listeners registered.");
     }
 
+    @Scheduled(initialDelayString = "${fint.consumer.register-delay:70000}", fixedDelay = Long.MAX_VALUE)
+    public void registerOrgIds() {
+        log.info("Bootstrapping orgId registration ...");
+        Event event = new Event("", Constants.COMPONENT, DefaultActions.REGISTER_ORG_ID, Constants.COMPONENT_CONSUMER);
+        fintEvents.sendDownstream(event);
+    }
+
     @Override
     public void accept(Event event) {
         log.debug("Received event: {}", event);
@@ -58,7 +64,10 @@ public class EventListener implements FintEventListener {
             if (props.getAssets().add(event.getOrgId())) {
                 log.info("Registering orgId {} for {}", event.getOrgId(), event.getClient());
                 fintEvents.registerUpstreamListener(event.getOrgId(), this);
-                cacheServices.forEach(c -> c.createCache(event.getOrgId()));
+                cacheServices.forEach(c -> {
+                    c.createCache(event.getOrgId());
+                    c.populateCache(event.getOrgId());
+                });
             }
             return;
         } else if (event.isHealthCheck()) {

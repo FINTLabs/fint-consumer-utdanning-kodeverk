@@ -1,37 +1,43 @@
 package no.fint.consumer.models.fravarstype;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.ImmutableMap;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+
 import no.fint.audit.FintAuditService;
+
 import no.fint.consumer.config.Constants;
 import no.fint.consumer.config.ConsumerProps;
 import no.fint.consumer.event.ConsumerEventUtil;
-import no.fint.consumer.exceptions.CreateEntityMismatchException;
-import no.fint.consumer.exceptions.EntityFoundException;
-import no.fint.consumer.exceptions.EntityNotFoundException;
-import no.fint.consumer.exceptions.UpdateEntityMismatchException;
+import no.fint.consumer.exceptions.*;
 import no.fint.consumer.status.StatusCache;
 import no.fint.consumer.utils.RestEndpoints;
-import no.fint.event.model.Event;
-import no.fint.event.model.HeaderConstants;
-import no.fint.event.model.Status;
-import no.fint.model.resource.utdanning.kodeverk.FravarstypeResource;
-import no.fint.model.resource.utdanning.kodeverk.FravarstypeResources;
-import no.fint.model.utdanning.kodeverk.KodeverkActions;
+
+import no.fint.event.model.*;
+
 import no.fint.relations.FintRelationsMediaType;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.naming.NameNotFoundException;
 import java.net.UnknownHostException;
+import java.net.URI;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import javax.naming.NameNotFoundException;
+
+import no.fint.model.resource.utdanning.kodeverk.FravarstypeResource;
+import no.fint.model.resource.utdanning.kodeverk.FravarstypeResources;
+import no.fint.model.utdanning.kodeverk.KodeverkActions;
 
 @Slf4j
 @Api(tags = {"Fravarstype"})
@@ -71,19 +77,11 @@ public class FravarstypeController {
     }
 
     @GetMapping("/cache/size")
-    public ImmutableMap<String, Integer> getCacheSize(@RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId) {
+     public ImmutableMap<String, Integer> getCacheSize(@RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId) {
         if (props.isOverrideOrgId() || orgId == null) {
             orgId = props.getDefaultOrgId();
         }
         return ImmutableMap.of("size", cacheService.getAll(orgId).size());
-    }
-
-    @PostMapping("/cache/rebuild")
-    public void rebuildCache(@RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId) {
-        if (props.isOverrideOrgId() || orgId == null) {
-            orgId = props.getDefaultOrgId();
-        }
-        cacheService.rebuildCache(orgId);
     }
 
     @GetMapping
@@ -144,37 +142,39 @@ public class FravarstypeController {
     }
 
 
+
+
     //
     // Exception handlers
     //
     @ExceptionHandler(UpdateEntityMismatchException.class)
     public ResponseEntity handleUpdateEntityMismatch(Exception e) {
-        return ResponseEntity.badRequest().body(e);
+        return ResponseEntity.badRequest().body(ErrorResponse.of(e));
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity handleEntityNotFound(Exception e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.of(e));
     }
 
     @ExceptionHandler(CreateEntityMismatchException.class)
     public ResponseEntity handleCreateEntityMismatch(Exception e) {
-        return ResponseEntity.badRequest().body(e);
+        return ResponseEntity.badRequest().body(ErrorResponse.of(e));
     }
 
     @ExceptionHandler(EntityFoundException.class)
     public ResponseEntity handleEntityFound(Exception e) {
-        return ResponseEntity.status(HttpStatus.FOUND).body(e);
+        return ResponseEntity.status(HttpStatus.FOUND).body(ErrorResponse.of(e));
     }
 
     @ExceptionHandler(NameNotFoundException.class)
     public ResponseEntity handleNameNotFound(Exception e) {
-        return ResponseEntity.badRequest().body(e);
+        return ResponseEntity.badRequest().body(ErrorResponse.of(e));
     }
 
     @ExceptionHandler(UnknownHostException.class)
     public ResponseEntity handleUnkownHost(Exception e) {
-        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(e);
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(ErrorResponse.of(e));
     }
 
 }

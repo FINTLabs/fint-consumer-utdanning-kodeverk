@@ -36,9 +36,9 @@ public class FravarstypeLinker extends FintLinker<FravarstypeResource> {
         if (!isNull(fravarstype.getSystemId()) && !isEmpty(fravarstype.getSystemId().getIdentifikatorverdi())) {
             return createHrefWithId(fravarstype.getSystemId().getIdentifikatorverdi(), "systemid");
         }
-
+        
         return null;
     }
-
+    
 }
 

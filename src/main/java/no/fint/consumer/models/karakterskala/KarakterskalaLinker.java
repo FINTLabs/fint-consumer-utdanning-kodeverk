@@ -36,9 +36,9 @@ public class KarakterskalaLinker extends FintLinker<KarakterskalaResource> {
         if (!isNull(karakterskala.getSystemId()) && !isEmpty(karakterskala.getSystemId().getIdentifikatorverdi())) {
             return createHrefWithId(karakterskala.getSystemId().getIdentifikatorverdi(), "systemid");
         }
-
+        
         return null;
     }
-
+    
 }
 
