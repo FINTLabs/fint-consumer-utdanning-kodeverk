@@ -7,6 +7,7 @@ import no.fint.relations.FintLinker;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.stream.IntStream;
 
 import static java.util.Objects.isNull;
 import static org.springframework.util.StringUtils.isEmpty;
@@ -39,6 +40,15 @@ public class SkoleeiertypeLinker extends FintLinker<SkoleeiertypeResource> {
         
         return null;
     }
-    
+
+    int[] hashCodes(SkoleeiertypeResource skoleeiertype) {
+        IntStream.Builder builder = IntStream.builder();
+        if (!isNull(skoleeiertype.getSystemId()) && !isEmpty(skoleeiertype.getSystemId().getIdentifikatorverdi())) {
+            builder.add(skoleeiertype.getSystemId().getIdentifikatorverdi().hashCode());
+        }
+        
+        return builder.build().toArray();
+    }
+
 }
 
