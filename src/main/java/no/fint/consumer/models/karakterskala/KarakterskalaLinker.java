@@ -7,6 +7,7 @@ import no.fint.relations.FintLinker;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.stream.IntStream;
 
 import static java.util.Objects.isNull;
 import static org.springframework.util.StringUtils.isEmpty;
@@ -36,8 +37,17 @@ public class KarakterskalaLinker extends FintLinker<KarakterskalaResource> {
         if (!isNull(karakterskala.getSystemId()) && !isEmpty(karakterskala.getSystemId().getIdentifikatorverdi())) {
             return createHrefWithId(karakterskala.getSystemId().getIdentifikatorverdi(), "systemid");
         }
-
+        
         return null;
+    }
+
+    int[] hashCodes(KarakterskalaResource karakterskala) {
+        IntStream.Builder builder = IntStream.builder();
+        if (!isNull(karakterskala.getSystemId()) && !isEmpty(karakterskala.getSystemId().getIdentifikatorverdi())) {
+            builder.add(karakterskala.getSystemId().getIdentifikatorverdi().hashCode());
+        }
+        
+        return builder.build().toArray();
     }
 
 }

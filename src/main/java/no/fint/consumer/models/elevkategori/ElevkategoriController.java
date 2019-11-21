@@ -1,37 +1,46 @@
 package no.fint.consumer.models.elevkategori;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.ImmutableMap;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+
 import no.fint.audit.FintAuditService;
+
+import no.fint.cache.exceptions.*;
 import no.fint.consumer.config.Constants;
 import no.fint.consumer.config.ConsumerProps;
 import no.fint.consumer.event.ConsumerEventUtil;
-import no.fint.consumer.exceptions.CreateEntityMismatchException;
-import no.fint.consumer.exceptions.EntityFoundException;
-import no.fint.consumer.exceptions.EntityNotFoundException;
-import no.fint.consumer.exceptions.UpdateEntityMismatchException;
+import no.fint.consumer.event.SynchronousEvents;
+import no.fint.consumer.exceptions.*;
 import no.fint.consumer.status.StatusCache;
+import no.fint.consumer.utils.EventResponses;
 import no.fint.consumer.utils.RestEndpoints;
-import no.fint.event.model.Event;
-import no.fint.event.model.HeaderConstants;
-import no.fint.event.model.Status;
-import no.fint.model.resource.utdanning.kodeverk.ElevkategoriResource;
-import no.fint.model.resource.utdanning.kodeverk.ElevkategoriResources;
-import no.fint.model.utdanning.kodeverk.KodeverkActions;
+
+import no.fint.event.model.*;
+
 import no.fint.relations.FintRelationsMediaType;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.naming.NameNotFoundException;
 import java.net.UnknownHostException;
+import java.net.URI;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
+
+import no.fint.model.resource.utdanning.kodeverk.ElevkategoriResource;
+import no.fint.model.resource.utdanning.kodeverk.ElevkategoriResources;
+import no.fint.model.utdanning.kodeverk.KodeverkActions;
 
 @Slf4j
 @Api(tags = {"Elevkategori"})
@@ -40,7 +49,7 @@ import java.util.Optional;
 @RequestMapping(name = "Elevkategori", value = RestEndpoints.ELEVKATEGORI, produces = {FintRelationsMediaType.APPLICATION_HAL_JSON_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
 public class ElevkategoriController {
 
-    @Autowired
+    @Autowired(required = false)
     private ElevkategoriCacheService cacheService;
 
     @Autowired
@@ -61,8 +70,14 @@ public class ElevkategoriController {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private SynchronousEvents synchronousEvents;
+
     @GetMapping("/last-updated")
     public Map<String, String> getLastUpdated(@RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId) {
+        if (cacheService == null) {
+            throw new CacheDisabledException("Elevkategori cache is disabled.");
+        }
         if (props.isOverrideOrgId() || orgId == null) {
             orgId = props.getDefaultOrgId();
         }
@@ -71,19 +86,14 @@ public class ElevkategoriController {
     }
 
     @GetMapping("/cache/size")
-    public ImmutableMap<String, Integer> getCacheSize(@RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId) {
+     public ImmutableMap<String, Integer> getCacheSize(@RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId) {
+        if (cacheService == null) {
+            throw new CacheDisabledException("Elevkategori cache is disabled.");
+        }
         if (props.isOverrideOrgId() || orgId == null) {
             orgId = props.getDefaultOrgId();
         }
         return ImmutableMap.of("size", cacheService.getAll(orgId).size());
-    }
-
-    @PostMapping("/cache/rebuild")
-    public void rebuildCache(@RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId) {
-        if (props.isOverrideOrgId() || orgId == null) {
-            orgId = props.getDefaultOrgId();
-        }
-        cacheService.rebuildCache(orgId);
     }
 
     @GetMapping
@@ -91,6 +101,9 @@ public class ElevkategoriController {
             @RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId,
             @RequestHeader(name = HeaderConstants.CLIENT, required = false) String client,
             @RequestParam(required = false) Long sinceTimeStamp) {
+        if (cacheService == null) {
+            throw new CacheDisabledException("Elevkategori cache is disabled.");
+        }
         if (props.isOverrideOrgId() || orgId == null) {
             orgId = props.getDefaultOrgId();
         }
@@ -100,8 +113,8 @@ public class ElevkategoriController {
         log.debug("OrgId: {}, Client: {}", orgId, client);
 
         Event event = new Event(orgId, Constants.COMPONENT, KodeverkActions.GET_ALL_ELEVKATEGORI, client);
+        event.setOperation(Operation.READ);
         fintAuditService.audit(event);
-
         fintAuditService.audit(event, Status.CACHE);
 
         List<ElevkategoriResource> elevkategori;
@@ -121,60 +134,90 @@ public class ElevkategoriController {
     public ElevkategoriResource getElevkategoriBySystemId(
             @PathVariable String id,
             @RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId,
-            @RequestHeader(name = HeaderConstants.CLIENT, required = false) String client) {
+            @RequestHeader(name = HeaderConstants.CLIENT, required = false) String client) throws InterruptedException {
         if (props.isOverrideOrgId() || orgId == null) {
             orgId = props.getDefaultOrgId();
         }
         if (client == null) {
             client = props.getDefaultClient();
         }
-        log.debug("SystemId: {}, OrgId: {}, Client: {}", id, orgId, client);
+        log.debug("systemId: {}, OrgId: {}, Client: {}", id, orgId, client);
 
         Event event = new Event(orgId, Constants.COMPONENT, KodeverkActions.GET_ELEVKATEGORI, client);
-        event.setQuery("systemid/" + id);
-        fintAuditService.audit(event);
+        event.setOperation(Operation.READ);
+        event.setQuery("systemId/" + id);
 
-        fintAuditService.audit(event, Status.CACHE);
+        if (cacheService != null) {
+            fintAuditService.audit(event);
+            fintAuditService.audit(event, Status.CACHE);
 
-        Optional<ElevkategoriResource> elevkategori = cacheService.getElevkategoriBySystemId(orgId, id);
+            Optional<ElevkategoriResource> elevkategori = cacheService.getElevkategoriBySystemId(orgId, id);
 
-        fintAuditService.audit(event, Status.CACHE_RESPONSE, Status.SENT_TO_CLIENT);
+            fintAuditService.audit(event, Status.CACHE_RESPONSE, Status.SENT_TO_CLIENT);
 
-        return elevkategori.map(linker::toResource).orElseThrow(() -> new EntityNotFoundException(id));
+            return elevkategori.map(linker::toResource).orElseThrow(() -> new EntityNotFoundException(id));
+
+        } else {
+            BlockingQueue<Event> queue = synchronousEvents.register(event);
+            consumerEventUtil.send(event);
+
+            Event response = EventResponses.handle(queue.poll(5, TimeUnit.MINUTES));
+
+            if (response.getData() == null ||
+                    response.getData().isEmpty()) throw new EntityNotFoundException(id);
+
+            ElevkategoriResource elevkategori = objectMapper.convertValue(response.getData().get(0), ElevkategoriResource.class);
+
+            fintAuditService.audit(response, Status.SENT_TO_CLIENT);
+
+            return linker.toResource(elevkategori);
+        }    
     }
+
+
 
 
     //
     // Exception handlers
     //
+    @ExceptionHandler(EventResponseException.class)
+    public ResponseEntity handleEventResponseException(EventResponseException e) {
+        return ResponseEntity.status(e.getStatus()).body(e.getResponse());
+    }
+
     @ExceptionHandler(UpdateEntityMismatchException.class)
     public ResponseEntity handleUpdateEntityMismatch(Exception e) {
-        return ResponseEntity.badRequest().body(e);
+        return ResponseEntity.badRequest().body(ErrorResponse.of(e));
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity handleEntityNotFound(Exception e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.of(e));
     }
 
     @ExceptionHandler(CreateEntityMismatchException.class)
     public ResponseEntity handleCreateEntityMismatch(Exception e) {
-        return ResponseEntity.badRequest().body(e);
+        return ResponseEntity.badRequest().body(ErrorResponse.of(e));
     }
 
     @ExceptionHandler(EntityFoundException.class)
     public ResponseEntity handleEntityFound(Exception e) {
-        return ResponseEntity.status(HttpStatus.FOUND).body(e);
+        return ResponseEntity.status(HttpStatus.FOUND).body(ErrorResponse.of(e));
     }
 
-    @ExceptionHandler(NameNotFoundException.class)
-    public ResponseEntity handleNameNotFound(Exception e) {
-        return ResponseEntity.badRequest().body(e);
+    @ExceptionHandler(CacheDisabledException.class)
+    public ResponseEntity handleBadRequest(Exception e) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(ErrorResponse.of(e));
     }
 
     @ExceptionHandler(UnknownHostException.class)
     public ResponseEntity handleUnkownHost(Exception e) {
-        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(e);
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(ErrorResponse.of(e));
+    }
+
+    @ExceptionHandler(CacheNotFoundException.class)
+    public ResponseEntity handleCacheNotFound(Exception e) {
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(ErrorResponse.of(e));
     }
 
 }
