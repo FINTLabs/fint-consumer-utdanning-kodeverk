@@ -56,7 +56,12 @@ spec:
             - {name: fint.relations.default-base-url, value: 'https://beta.felleskomponent.no'}
             - {name: server.context-path, value: /utdanning/kodeverk}
             - {name: spring.mvc.logResolvedException,  value: 'false'}
-          image: fintlabs.azurecr.io/consumer-utdanning-kodeverk:3.3.0
+          envFrom:
+            - configMapRef:
+                name: fint-environment
+            - secretRef:
+                name: fint-events-azure-eventhub
+          image: fintlabs.azurecr.io/consumer-utdanning-kodeverk:build.11
           name: consumer-utdanning-kodeverk
           ports:
             - {containerPort: 8080}
@@ -102,7 +107,12 @@ spec:
             - {name: fint.provider.max-number-of-emitters, value: '5'}
             - {name: server.context-path, value: /utdanning/kodeverk/provider}
             - {name: fint.provider.assets.endpoint, value: 'https://admin.fintlabs.no/api/components/assets/utdanning_kodeverk'}
-          image: fintlabs.azurecr.io/provider:2.2.0
+          envFrom:
+            - configMapRef:
+                name: fint-environment
+            - secretRef:
+                name: fint-events-azure-eventhub
+          image: fintlabs.azurecr.io/provider:2.3.0-alpha-2
           name: provider-utdanning-kodeverk
           ports:
             - {containerPort: 8080}
