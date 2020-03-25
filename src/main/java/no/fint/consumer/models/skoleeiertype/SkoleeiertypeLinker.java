@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
 import static org.springframework.util.StringUtils.isEmpty;
-
 
 @Component
 public class SkoleeiertypeLinker extends FintLinker<SkoleeiertypeResource> {
@@ -34,11 +34,17 @@ public class SkoleeiertypeLinker extends FintLinker<SkoleeiertypeResource> {
 
     @Override
     public String getSelfHref(SkoleeiertypeResource skoleeiertype) {
+        return getAllSelfHrefs(skoleeiertype).findFirst().orElse(null);
+    }
+
+    @Override
+    public Stream<String> getAllSelfHrefs(SkoleeiertypeResource skoleeiertype) {
+        Stream.Builder<String> builder = Stream.builder();
         if (!isNull(skoleeiertype.getSystemId()) && !isEmpty(skoleeiertype.getSystemId().getIdentifikatorverdi())) {
-            return createHrefWithId(skoleeiertype.getSystemId().getIdentifikatorverdi(), "systemid");
+            builder.add(createHrefWithId(skoleeiertype.getSystemId().getIdentifikatorverdi(), "systemid"));
         }
         
-        return null;
+        return builder.build();
     }
 
     int[] hashCodes(SkoleeiertypeResource skoleeiertype) {
