@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
 import static org.springframework.util.StringUtils.isEmpty;
-
 
 @Component
 public class KarakterskalaLinker extends FintLinker<KarakterskalaResource> {
@@ -34,11 +34,17 @@ public class KarakterskalaLinker extends FintLinker<KarakterskalaResource> {
 
     @Override
     public String getSelfHref(KarakterskalaResource karakterskala) {
+        return getAllSelfHrefs(karakterskala).findFirst().orElse(null);
+    }
+
+    @Override
+    public Stream<String> getAllSelfHrefs(KarakterskalaResource karakterskala) {
+        Stream.Builder<String> builder = Stream.builder();
         if (!isNull(karakterskala.getSystemId()) && !isEmpty(karakterskala.getSystemId().getIdentifikatorverdi())) {
-            return createHrefWithId(karakterskala.getSystemId().getIdentifikatorverdi(), "systemid");
+            builder.add(createHrefWithId(karakterskala.getSystemId().getIdentifikatorverdi(), "systemid"));
         }
         
-        return null;
+        return builder.build();
     }
 
     int[] hashCodes(KarakterskalaResource karakterskala) {
