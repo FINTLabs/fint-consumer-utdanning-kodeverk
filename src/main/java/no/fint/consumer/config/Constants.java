@@ -18,8 +18,14 @@ public enum Constants {
     public static final String CACHE_INITIALDELAY_KARAKTERSKALA = "${fint.consumer.cache.initialDelay.karakterskala:1020000}";
     public static final String CACHE_FIXEDRATE_KARAKTERSKALA = "${fint.consumer.cache.fixedRate.karakterskala:900000}";
     
-    public static final String CACHE_INITIALDELAY_SKOLEEIERTYPE = "${fint.consumer.cache.initialDelay.skoleeiertype:1080000}";
+    public static final String CACHE_INITIALDELAY_SKOLEAR = "${fint.consumer.cache.initialDelay.skolear:1080000}";
+    public static final String CACHE_FIXEDRATE_SKOLEAR = "${fint.consumer.cache.fixedRate.skolear:900000}";
+    
+    public static final String CACHE_INITIALDELAY_SKOLEEIERTYPE = "${fint.consumer.cache.initialDelay.skoleeiertype:1140000}";
     public static final String CACHE_FIXEDRATE_SKOLEEIERTYPE = "${fint.consumer.cache.fixedRate.skoleeiertype:900000}";
+    
+    public static final String CACHE_INITIALDELAY_TERMIN = "${fint.consumer.cache.initialDelay.termin:1200000}";
+    public static final String CACHE_FIXEDRATE_TERMIN = "${fint.consumer.cache.fixedRate.termin:900000}";
     
 
 }
