@@ -1,6 +1,5 @@
 package no.fint.consumer.models.termin;
 
-import no.fint.model.resource.Link;
 import no.fint.model.resource.utdanning.kodeverk.TerminResource;
 import no.fint.model.resource.utdanning.kodeverk.TerminResources;
 import no.fint.relations.FintLinker;
@@ -26,9 +25,14 @@ public class TerminLinker extends FintLinker<TerminResource> {
 
     @Override
     public TerminResources toResources(Collection<TerminResource> collection) {
+        return toResources(collection.stream(), 0, 0, collection.size());
+    }
+
+    @Override
+    public TerminResources toResources(Stream<TerminResource> stream, int offset, int size, int totalItems) {
         TerminResources resources = new TerminResources();
-        collection.stream().map(this::toResource).forEach(resources::addResource);
-        resources.addSelf(Link.with(self()));
+        stream.map(this::toResource).forEach(resources::addResource);
+        addPagination(resources, offset, size, totalItems);
         return resources;
     }
 

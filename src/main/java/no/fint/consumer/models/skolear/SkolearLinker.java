@@ -1,6 +1,5 @@
 package no.fint.consumer.models.skolear;
 
-import no.fint.model.resource.Link;
 import no.fint.model.resource.utdanning.kodeverk.SkolearResource;
 import no.fint.model.resource.utdanning.kodeverk.SkolearResources;
 import no.fint.relations.FintLinker;
@@ -26,9 +25,14 @@ public class SkolearLinker extends FintLinker<SkolearResource> {
 
     @Override
     public SkolearResources toResources(Collection<SkolearResource> collection) {
+        return toResources(collection.stream(), 0, 0, collection.size());
+    }
+
+    @Override
+    public SkolearResources toResources(Stream<SkolearResource> stream, int offset, int size, int totalItems) {
         SkolearResources resources = new SkolearResources();
-        collection.stream().map(this::toResource).forEach(resources::addResource);
-        resources.addSelf(Link.with(self()));
+        stream.map(this::toResource).forEach(resources::addResource);
+        addPagination(resources, offset, size, totalItems);
         return resources;
     }
 
