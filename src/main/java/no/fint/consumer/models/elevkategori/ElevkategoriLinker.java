@@ -1,6 +1,5 @@
 package no.fint.consumer.models.elevkategori;
 
-import no.fint.model.resource.Link;
 import no.fint.model.resource.utdanning.kodeverk.ElevkategoriResource;
 import no.fint.model.resource.utdanning.kodeverk.ElevkategoriResources;
 import no.fint.relations.FintLinker;
@@ -26,9 +25,14 @@ public class ElevkategoriLinker extends FintLinker<ElevkategoriResource> {
 
     @Override
     public ElevkategoriResources toResources(Collection<ElevkategoriResource> collection) {
+        return toResources(collection.stream(), 0, 0, collection.size());
+    }
+
+    @Override
+    public ElevkategoriResources toResources(Stream<ElevkategoriResource> stream, int offset, int size, int totalItems) {
         ElevkategoriResources resources = new ElevkategoriResources();
-        collection.stream().map(this::toResource).forEach(resources::addResource);
-        resources.addSelf(Link.with(self()));
+        stream.map(this::toResource).forEach(resources::addResource);
+        addPagination(resources, offset, size, totalItems);
         return resources;
     }
 

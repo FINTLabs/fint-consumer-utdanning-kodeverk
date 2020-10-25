@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.ImmutableMap;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import no.fint.audit.FintAuditService;
 
@@ -29,14 +30,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import java.net.UnknownHostException;
 import java.net.URI;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 import no.fint.model.resource.utdanning.kodeverk.TerminResource;
 import no.fint.model.resource.utdanning.kodeverk.TerminResources;
@@ -86,7 +88,7 @@ public class TerminController {
     }
 
     @GetMapping("/cache/size")
-     public ImmutableMap<String, Integer> getCacheSize(@RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId) {
+    public ImmutableMap<String, Integer> getCacheSize(@RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId) {
         if (cacheService == null) {
             throw new CacheDisabledException("Termin cache is disabled.");
         }
@@ -100,7 +102,10 @@ public class TerminController {
     public TerminResources getTermin(
             @RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId,
             @RequestHeader(name = HeaderConstants.CLIENT, required = false) String client,
-            @RequestParam(required = false) Long sinceTimeStamp) {
+            @RequestParam(defaultValue = "0") long sinceTimeStamp,
+            @RequestParam(defaultValue = "0") int size,
+            @RequestParam(defaultValue = "0") int offset,
+            HttpServletRequest request) {
         if (cacheService == null) {
             throw new CacheDisabledException("Termin cache is disabled.");
         }
@@ -114,19 +119,26 @@ public class TerminController {
 
         Event event = new Event(orgId, Constants.COMPONENT, KodeverkActions.GET_ALL_TERMIN, client);
         event.setOperation(Operation.READ);
+        if (StringUtils.isNotBlank(request.getQueryString())) {
+            event.setQuery("?" + request.getQueryString());
+        }
         fintAuditService.audit(event);
         fintAuditService.audit(event, Status.CACHE);
 
-        List<TerminResource> termin;
-        if (sinceTimeStamp == null) {
-            termin = cacheService.getAll(orgId);
+        Stream<TerminResource> resources;
+        if (size > 0 && offset >= 0 && sinceTimeStamp > 0) {
+            resources = cacheService.streamSliceSince(orgId, sinceTimeStamp, offset, size);
+        } else if (size > 0 && offset >= 0) {
+            resources = cacheService.streamSlice(orgId, offset, size);
+        } else if (sinceTimeStamp > 0) {
+            resources = cacheService.streamSince(orgId, sinceTimeStamp);
         } else {
-            termin = cacheService.getAll(orgId, sinceTimeStamp);
+            resources = cacheService.streamAll(orgId);
         }
 
         fintAuditService.audit(event, Status.CACHE_RESPONSE, Status.SENT_TO_CLIENT);
 
-        return linker.toResources(termin);
+        return linker.toResources(resources, offset, size, cacheService.getCacheSize(orgId));
     }
 
 

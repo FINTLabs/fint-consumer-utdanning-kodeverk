@@ -1,6 +1,5 @@
 package no.fint.consumer.models.karakterskala;
 
-import no.fint.model.resource.Link;
 import no.fint.model.resource.utdanning.kodeverk.KarakterskalaResource;
 import no.fint.model.resource.utdanning.kodeverk.KarakterskalaResources;
 import no.fint.relations.FintLinker;
@@ -26,9 +25,14 @@ public class KarakterskalaLinker extends FintLinker<KarakterskalaResource> {
 
     @Override
     public KarakterskalaResources toResources(Collection<KarakterskalaResource> collection) {
+        return toResources(collection.stream(), 0, 0, collection.size());
+    }
+
+    @Override
+    public KarakterskalaResources toResources(Stream<KarakterskalaResource> stream, int offset, int size, int totalItems) {
         KarakterskalaResources resources = new KarakterskalaResources();
-        collection.stream().map(this::toResource).forEach(resources::addResource);
-        resources.addSelf(Link.with(self()));
+        stream.map(this::toResource).forEach(resources::addResource);
+        addPagination(resources, offset, size, totalItems);
         return resources;
     }
 
