@@ -3,8 +3,12 @@ package no.fint.consumer.config;
 import no.fint.consumer.utils.RestEndpoints;
 import java.util.Map;
 import com.google.common.collect.ImmutableMap;
-
-import no.fint.model.utdanning.kodeverk.*;
+import no.fint.model.utdanning.kodeverk.Elevkategori;
+import no.fint.model.utdanning.kodeverk.Fravarstype;
+import no.fint.model.utdanning.kodeverk.Karakterskala;
+import no.fint.model.utdanning.kodeverk.Skolear;
+import no.fint.model.utdanning.kodeverk.Skoleeiertype;
+import no.fint.model.utdanning.kodeverk.Termin;
 
 public class LinkMapper {
 
