@@ -11,28 +11,34 @@ public enum Constants {
     public static final String CACHE_INITIALDELAY_AVBRUDDSARSAK = "${fint.consumer.cache.initialDelay.avbruddsarsak:900000}";
     public static final String CACHE_FIXEDRATE_AVBRUDDSARSAK = "${fint.consumer.cache.fixedRate.avbruddsarsak:900000}";
     
-    public static final String CACHE_INITIALDELAY_ELEVKATEGORI = "${fint.consumer.cache.initialDelay.elevkategori:1000000}";
+    public static final String CACHE_INITIALDELAY_EKSAMENSFORM = "${fint.consumer.cache.initialDelay.eksamensform:1000000}";
+    public static final String CACHE_FIXEDRATE_EKSAMENSFORM = "${fint.consumer.cache.fixedRate.eksamensform:900000}";
+    
+    public static final String CACHE_INITIALDELAY_ELEVKATEGORI = "${fint.consumer.cache.initialDelay.elevkategori:1100000}";
     public static final String CACHE_FIXEDRATE_ELEVKATEGORI = "${fint.consumer.cache.fixedRate.elevkategori:900000}";
     
-    public static final String CACHE_INITIALDELAY_FAGMERKNAD = "${fint.consumer.cache.initialDelay.fagmerknad:1100000}";
+    public static final String CACHE_INITIALDELAY_FAGMERKNAD = "${fint.consumer.cache.initialDelay.fagmerknad:1200000}";
     public static final String CACHE_FIXEDRATE_FAGMERKNAD = "${fint.consumer.cache.fixedRate.fagmerknad:900000}";
     
-    public static final String CACHE_INITIALDELAY_FRAVARSTYPE = "${fint.consumer.cache.initialDelay.fravarstype:1200000}";
+    public static final String CACHE_INITIALDELAY_FRAVARSTYPE = "${fint.consumer.cache.initialDelay.fravarstype:1300000}";
     public static final String CACHE_FIXEDRATE_FRAVARSTYPE = "${fint.consumer.cache.fixedRate.fravarstype:900000}";
     
-    public static final String CACHE_INITIALDELAY_KARAKTERSKALA = "${fint.consumer.cache.initialDelay.karakterskala:1300000}";
+    public static final String CACHE_INITIALDELAY_KARAKTERSKALA = "${fint.consumer.cache.initialDelay.karakterskala:1400000}";
     public static final String CACHE_FIXEDRATE_KARAKTERSKALA = "${fint.consumer.cache.fixedRate.karakterskala:900000}";
     
-    public static final String CACHE_INITIALDELAY_SKOLEAR = "${fint.consumer.cache.initialDelay.skolear:1400000}";
+    public static final String CACHE_INITIALDELAY_KARAKTERSTATUS = "${fint.consumer.cache.initialDelay.karakterstatus:1500000}";
+    public static final String CACHE_FIXEDRATE_KARAKTERSTATUS = "${fint.consumer.cache.fixedRate.karakterstatus:900000}";
+    
+    public static final String CACHE_INITIALDELAY_SKOLEAR = "${fint.consumer.cache.initialDelay.skolear:1600000}";
     public static final String CACHE_FIXEDRATE_SKOLEAR = "${fint.consumer.cache.fixedRate.skolear:900000}";
     
-    public static final String CACHE_INITIALDELAY_SKOLEEIERTYPE = "${fint.consumer.cache.initialDelay.skoleeiertype:1500000}";
+    public static final String CACHE_INITIALDELAY_SKOLEEIERTYPE = "${fint.consumer.cache.initialDelay.skoleeiertype:1700000}";
     public static final String CACHE_FIXEDRATE_SKOLEEIERTYPE = "${fint.consumer.cache.fixedRate.skoleeiertype:900000}";
     
-    public static final String CACHE_INITIALDELAY_TERMIN = "${fint.consumer.cache.initialDelay.termin:1600000}";
+    public static final String CACHE_INITIALDELAY_TERMIN = "${fint.consumer.cache.initialDelay.termin:1800000}";
     public static final String CACHE_FIXEDRATE_TERMIN = "${fint.consumer.cache.fixedRate.termin:900000}";
     
-    public static final String CACHE_INITIALDELAY_TILRETTELEGGING = "${fint.consumer.cache.initialDelay.tilrettelegging:1700000}";
+    public static final String CACHE_INITIALDELAY_TILRETTELEGGING = "${fint.consumer.cache.initialDelay.tilrettelegging:1900000}";
     public static final String CACHE_FIXEDRATE_TILRETTELEGGING = "${fint.consumer.cache.fixedRate.tilrettelegging:900000}";
     
 
