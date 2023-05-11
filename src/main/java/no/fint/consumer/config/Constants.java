@@ -29,16 +29,22 @@ public enum Constants {
     public static final String CACHE_INITIALDELAY_KARAKTERSTATUS = "${fint.consumer.cache.initialDelay.karakterstatus:1500000}";
     public static final String CACHE_FIXEDRATE_KARAKTERSTATUS = "${fint.consumer.cache.fixedRate.karakterstatus:900000}";
     
-    public static final String CACHE_INITIALDELAY_SKOLEAR = "${fint.consumer.cache.initialDelay.skolear:1600000}";
+    public static final String CACHE_INITIALDELAY_OTENHET = "${fint.consumer.cache.initialDelay.otenhet:1600000}";
+    public static final String CACHE_FIXEDRATE_OTENHET = "${fint.consumer.cache.fixedRate.otenhet:900000}";
+    
+    public static final String CACHE_INITIALDELAY_OTSTATUS = "${fint.consumer.cache.initialDelay.otstatus:1700000}";
+    public static final String CACHE_FIXEDRATE_OTSTATUS = "${fint.consumer.cache.fixedRate.otstatus:900000}";
+    
+    public static final String CACHE_INITIALDELAY_SKOLEAR = "${fint.consumer.cache.initialDelay.skolear:1800000}";
     public static final String CACHE_FIXEDRATE_SKOLEAR = "${fint.consumer.cache.fixedRate.skolear:900000}";
     
-    public static final String CACHE_INITIALDELAY_SKOLEEIERTYPE = "${fint.consumer.cache.initialDelay.skoleeiertype:1700000}";
+    public static final String CACHE_INITIALDELAY_SKOLEEIERTYPE = "${fint.consumer.cache.initialDelay.skoleeiertype:1900000}";
     public static final String CACHE_FIXEDRATE_SKOLEEIERTYPE = "${fint.consumer.cache.fixedRate.skoleeiertype:900000}";
     
-    public static final String CACHE_INITIALDELAY_TERMIN = "${fint.consumer.cache.initialDelay.termin:1800000}";
+    public static final String CACHE_INITIALDELAY_TERMIN = "${fint.consumer.cache.initialDelay.termin:2000000}";
     public static final String CACHE_FIXEDRATE_TERMIN = "${fint.consumer.cache.fixedRate.termin:900000}";
     
-    public static final String CACHE_INITIALDELAY_TILRETTELEGGING = "${fint.consumer.cache.initialDelay.tilrettelegging:1900000}";
+    public static final String CACHE_INITIALDELAY_TILRETTELEGGING = "${fint.consumer.cache.initialDelay.tilrettelegging:2100000}";
     public static final String CACHE_FIXEDRATE_TILRETTELEGGING = "${fint.consumer.cache.fixedRate.tilrettelegging:900000}";
     
 
