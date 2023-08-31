@@ -40,25 +40,25 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
-import no.fint.model.resource.utdanning.kodeverk.OTEnhetResource;
-import no.fint.model.resource.utdanning.kodeverk.OTEnhetResources;
+import no.fint.model.resource.utdanning.kodeverk.OtEnhetResource;
+import no.fint.model.resource.utdanning.kodeverk.OtEnhetResources;
 import no.fint.model.utdanning.kodeverk.KodeverkActions;
 
 @Slf4j
-@Api(tags = {"OTEnhet"})
+@Api(tags = {"OtEnhet"})
 @CrossOrigin
 @RestController
-@RequestMapping(name = "OTEnhet", value = RestEndpoints.OTENHET, produces = {FintRelationsMediaType.APPLICATION_HAL_JSON_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
-public class OTEnhetController {
+@RequestMapping(name = "OtEnhet", value = RestEndpoints.OTENHET, produces = {FintRelationsMediaType.APPLICATION_HAL_JSON_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
+public class OtEnhetController {
 
     @Autowired(required = false)
-    private OTEnhetCacheService cacheService;
+    private OtEnhetCacheService cacheService;
 
     @Autowired
     private FintAuditService fintAuditService;
 
     @Autowired
-    private OTEnhetLinker linker;
+    private OtEnhetLinker linker;
 
     @Autowired
     private ConsumerProps props;
@@ -78,7 +78,7 @@ public class OTEnhetController {
     @GetMapping("/last-updated")
     public Map<String, String> getLastUpdated(@RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId) {
         if (cacheService == null) {
-            throw new CacheDisabledException("OTEnhet cache is disabled.");
+            throw new CacheDisabledException("OtEnhet cache is disabled.");
         }
         if (props.isOverrideOrgId() || orgId == null) {
             orgId = props.getDefaultOrgId();
@@ -90,7 +90,7 @@ public class OTEnhetController {
     @GetMapping("/cache/size")
     public ImmutableMap<String, Integer> getCacheSize(@RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId) {
         if (cacheService == null) {
-            throw new CacheDisabledException("OTEnhet cache is disabled.");
+            throw new CacheDisabledException("OtEnhet cache is disabled.");
         }
         if (props.isOverrideOrgId() || orgId == null) {
             orgId = props.getDefaultOrgId();
@@ -99,7 +99,7 @@ public class OTEnhetController {
     }
 
     @GetMapping
-    public OTEnhetResources getOTEnhet(
+    public OtEnhetResources getOtEnhet(
             @RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId,
             @RequestHeader(name = HeaderConstants.CLIENT, required = false) String client,
             @RequestParam(defaultValue = "0") long sinceTimeStamp,
@@ -107,7 +107,7 @@ public class OTEnhetController {
             @RequestParam(defaultValue = "0") int offset,
             HttpServletRequest request) {
         if (cacheService == null) {
-            throw new CacheDisabledException("OTEnhet cache is disabled.");
+            throw new CacheDisabledException("OtEnhet cache is disabled.");
         }
         if (props.isOverrideOrgId() || orgId == null) {
             orgId = props.getDefaultOrgId();
@@ -125,7 +125,7 @@ public class OTEnhetController {
         fintAuditService.audit(event);
         fintAuditService.audit(event, Status.CACHE);
 
-        Stream<OTEnhetResource> resources;
+        Stream<OtEnhetResource> resources;
         if (size > 0 && offset >= 0 && sinceTimeStamp > 0) {
             resources = cacheService.streamSliceSince(orgId, sinceTimeStamp, offset, size);
         } else if (size > 0 && offset >= 0) {
@@ -143,7 +143,7 @@ public class OTEnhetController {
 
 
     @GetMapping("/systemid/{id:.+}")
-    public OTEnhetResource getOTEnhetBySystemId(
+    public OtEnhetResource getOtEnhetBySystemId(
             @PathVariable String id,
             @RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId,
             @RequestHeader(name = HeaderConstants.CLIENT, required = false) String client) throws InterruptedException {
@@ -163,7 +163,7 @@ public class OTEnhetController {
             fintAuditService.audit(event);
             fintAuditService.audit(event, Status.CACHE);
 
-            Optional<OTEnhetResource> otenhet = cacheService.getOTEnhetBySystemId(orgId, id);
+            Optional<OtEnhetResource> otenhet = cacheService.getOtEnhetBySystemId(orgId, id);
 
             fintAuditService.audit(event, Status.CACHE_RESPONSE, Status.SENT_TO_CLIENT);
 
@@ -178,7 +178,7 @@ public class OTEnhetController {
             if (response.getData() == null ||
                     response.getData().isEmpty()) throw new EntityNotFoundException(id);
 
-            OTEnhetResource otenhet = objectMapper.convertValue(response.getData().get(0), OTEnhetResource.class);
+            OtEnhetResource otenhet = objectMapper.convertValue(response.getData().get(0), OtEnhetResource.class);
 
             fintAuditService.audit(response, Status.SENT_TO_CLIENT);
 

@@ -26,17 +26,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import no.fint.model.utdanning.kodeverk.OTEnhet;
-import no.fint.model.resource.utdanning.kodeverk.OTEnhetResource;
+import no.fint.model.utdanning.kodeverk.OtEnhet;
+import no.fint.model.resource.utdanning.kodeverk.OtEnhetResource;
 import no.fint.model.utdanning.kodeverk.KodeverkActions;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
 
 @Slf4j
 @Service
 @ConditionalOnProperty(name = "fint.consumer.cache.disabled.otenhet", havingValue = "false", matchIfMissing = true)
-public class OTEnhetCacheService extends CacheService<OTEnhetResource> {
+public class OtEnhetCacheService extends CacheService<OtEnhetResource> {
 
-    public static final String MODEL = OTEnhet.class.getSimpleName().toLowerCase();
+    public static final String MODEL = OtEnhet.class.getSimpleName().toLowerCase();
 
     @Value("${fint.consumer.compatibility.fintresource:true}")
     private boolean checkFintResourceCompatibility;
@@ -51,16 +51,16 @@ public class OTEnhetCacheService extends CacheService<OTEnhetResource> {
     private ConsumerProps props;
 
     @Autowired
-    private OTEnhetLinker linker;
+    private OtEnhetLinker linker;
 
     private JavaType javaType;
 
     private ObjectMapper objectMapper;
 
-    public OTEnhetCacheService() {
+    public OtEnhetCacheService() {
         super(MODEL, KodeverkActions.GET_ALL_OTENHET, KodeverkActions.UPDATE_OTENHET);
         objectMapper = new ObjectMapper();
-        javaType = objectMapper.getTypeFactory().constructCollectionType(List.class, OTEnhetResource.class);
+        javaType = objectMapper.getTypeFactory().constructCollectionType(List.class, OtEnhetResource.class);
         objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
     }
 
@@ -81,17 +81,17 @@ public class OTEnhetCacheService extends CacheService<OTEnhetResource> {
 
     @Override
     public void populateCache(String orgId) {
-		log.info("Populating OTEnhet cache for {}", orgId);
+		log.info("Populating OtEnhet cache for {}", orgId);
         Event event = new Event(orgId, Constants.COMPONENT, KodeverkActions.GET_ALL_OTENHET, Constants.CACHE_SERVICE);
         consumerEventUtil.send(event);
     }
 
 
-    public Optional<OTEnhetResource> getOTEnhetBySystemId(String orgId, String systemId) {
+    public Optional<OtEnhetResource> getOtEnhetBySystemId(String orgId, String systemId) {
         return getOne(orgId, systemId.hashCode(),
             (resource) -> Optional
                 .ofNullable(resource)
-                .map(OTEnhetResource::getSystemId)
+                .map(OtEnhetResource::getSystemId)
                 .map(Identifikator::getIdentifikatorverdi)
                 .map(systemId::equals)
                 .orElse(false));
@@ -100,17 +100,17 @@ public class OTEnhetCacheService extends CacheService<OTEnhetResource> {
 
 	@Override
     public void onAction(Event event) {
-        List<OTEnhetResource> data;
+        List<OtEnhetResource> data;
         if (checkFintResourceCompatibility && fintResourceCompatibility.isFintResourceData(event.getData())) {
-            log.info("Compatibility: Converting FintResource<OTEnhetResource> to OTEnhetResource ...");
-            data = fintResourceCompatibility.convertResourceData(event.getData(), OTEnhetResource.class);
+            log.info("Compatibility: Converting FintResource<OtEnhetResource> to OtEnhetResource ...");
+            data = fintResourceCompatibility.convertResourceData(event.getData(), OtEnhetResource.class);
         } else {
             data = objectMapper.convertValue(event.getData(), javaType);
         }
         data.forEach(linker::mapLinks);
         if (KodeverkActions.valueOf(event.getAction()) == KodeverkActions.UPDATE_OTENHET) {
             if (event.getResponseStatus() == ResponseStatus.ACCEPTED || event.getResponseStatus() == ResponseStatus.CONFLICT) {
-                List<CacheObject<OTEnhetResource>> cacheObjects = data
+                List<CacheObject<OtEnhetResource>> cacheObjects = data
                     .stream()
                     .map(i -> new CacheObject<>(i, linker.hashCodes(i)))
                     .collect(Collectors.toList());
@@ -120,7 +120,7 @@ public class OTEnhetCacheService extends CacheService<OTEnhetResource> {
                 log.debug("Ignoring payload for {} with response status {}", event.getOrgId(), event.getResponseStatus());
             }
         } else {
-            List<CacheObject<OTEnhetResource>> cacheObjects = data
+            List<CacheObject<OtEnhetResource>> cacheObjects = data
                     .stream()
                     .map(i -> new CacheObject<>(i, linker.hashCodes(i)))
                     .collect(Collectors.toList());
