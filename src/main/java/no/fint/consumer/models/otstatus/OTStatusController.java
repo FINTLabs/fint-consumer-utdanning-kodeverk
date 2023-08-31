@@ -40,25 +40,25 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
-import no.fint.model.resource.utdanning.kodeverk.OTStatusResource;
-import no.fint.model.resource.utdanning.kodeverk.OTStatusResources;
+import no.fint.model.resource.utdanning.kodeverk.OtStatusResource;
+import no.fint.model.resource.utdanning.kodeverk.OtStatusResources;
 import no.fint.model.utdanning.kodeverk.KodeverkActions;
 
 @Slf4j
-@Api(tags = {"OTStatus"})
+@Api(tags = {"OtStatus"})
 @CrossOrigin
 @RestController
-@RequestMapping(name = "OTStatus", value = RestEndpoints.OTSTATUS, produces = {FintRelationsMediaType.APPLICATION_HAL_JSON_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
-public class OTStatusController {
+@RequestMapping(name = "OtStatus", value = RestEndpoints.OTSTATUS, produces = {FintRelationsMediaType.APPLICATION_HAL_JSON_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
+public class OtStatusController {
 
     @Autowired(required = false)
-    private OTStatusCacheService cacheService;
+    private OtStatusCacheService cacheService;
 
     @Autowired
     private FintAuditService fintAuditService;
 
     @Autowired
-    private OTStatusLinker linker;
+    private OtStatusLinker linker;
 
     @Autowired
     private ConsumerProps props;
@@ -78,7 +78,7 @@ public class OTStatusController {
     @GetMapping("/last-updated")
     public Map<String, String> getLastUpdated(@RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId) {
         if (cacheService == null) {
-            throw new CacheDisabledException("OTStatus cache is disabled.");
+            throw new CacheDisabledException("OtStatus cache is disabled.");
         }
         if (props.isOverrideOrgId() || orgId == null) {
             orgId = props.getDefaultOrgId();
@@ -90,7 +90,7 @@ public class OTStatusController {
     @GetMapping("/cache/size")
     public ImmutableMap<String, Integer> getCacheSize(@RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId) {
         if (cacheService == null) {
-            throw new CacheDisabledException("OTStatus cache is disabled.");
+            throw new CacheDisabledException("OtStatus cache is disabled.");
         }
         if (props.isOverrideOrgId() || orgId == null) {
             orgId = props.getDefaultOrgId();
@@ -99,7 +99,7 @@ public class OTStatusController {
     }
 
     @GetMapping
-    public OTStatusResources getOTStatus(
+    public OtStatusResources getOtStatus(
             @RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId,
             @RequestHeader(name = HeaderConstants.CLIENT, required = false) String client,
             @RequestParam(defaultValue = "0") long sinceTimeStamp,
@@ -107,7 +107,7 @@ public class OTStatusController {
             @RequestParam(defaultValue = "0") int offset,
             HttpServletRequest request) {
         if (cacheService == null) {
-            throw new CacheDisabledException("OTStatus cache is disabled.");
+            throw new CacheDisabledException("OtStatus cache is disabled.");
         }
         if (props.isOverrideOrgId() || orgId == null) {
             orgId = props.getDefaultOrgId();
@@ -125,7 +125,7 @@ public class OTStatusController {
         fintAuditService.audit(event);
         fintAuditService.audit(event, Status.CACHE);
 
-        Stream<OTStatusResource> resources;
+        Stream<OtStatusResource> resources;
         if (size > 0 && offset >= 0 && sinceTimeStamp > 0) {
             resources = cacheService.streamSliceSince(orgId, sinceTimeStamp, offset, size);
         } else if (size > 0 && offset >= 0) {
@@ -143,7 +143,7 @@ public class OTStatusController {
 
 
     @GetMapping("/systemid/{id:.+}")
-    public OTStatusResource getOTStatusBySystemId(
+    public OtStatusResource getOtStatusBySystemId(
             @PathVariable String id,
             @RequestHeader(name = HeaderConstants.ORG_ID, required = false) String orgId,
             @RequestHeader(name = HeaderConstants.CLIENT, required = false) String client) throws InterruptedException {
@@ -163,7 +163,7 @@ public class OTStatusController {
             fintAuditService.audit(event);
             fintAuditService.audit(event, Status.CACHE);
 
-            Optional<OTStatusResource> otstatus = cacheService.getOTStatusBySystemId(orgId, id);
+            Optional<OtStatusResource> otstatus = cacheService.getOtStatusBySystemId(orgId, id);
 
             fintAuditService.audit(event, Status.CACHE_RESPONSE, Status.SENT_TO_CLIENT);
 
@@ -178,7 +178,7 @@ public class OTStatusController {
             if (response.getData() == null ||
                     response.getData().isEmpty()) throw new EntityNotFoundException(id);
 
-            OTStatusResource otstatus = objectMapper.convertValue(response.getData().get(0), OTStatusResource.class);
+            OtStatusResource otstatus = objectMapper.convertValue(response.getData().get(0), OtStatusResource.class);
 
             fintAuditService.audit(response, Status.SENT_TO_CLIENT);
 

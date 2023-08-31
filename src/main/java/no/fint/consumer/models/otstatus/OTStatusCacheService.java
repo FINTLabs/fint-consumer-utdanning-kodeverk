@@ -26,17 +26,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import no.fint.model.utdanning.kodeverk.OTStatus;
-import no.fint.model.resource.utdanning.kodeverk.OTStatusResource;
+import no.fint.model.utdanning.kodeverk.OtStatus;
+import no.fint.model.resource.utdanning.kodeverk.OtStatusResource;
 import no.fint.model.utdanning.kodeverk.KodeverkActions;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
 
 @Slf4j
 @Service
 @ConditionalOnProperty(name = "fint.consumer.cache.disabled.otstatus", havingValue = "false", matchIfMissing = true)
-public class OTStatusCacheService extends CacheService<OTStatusResource> {
+public class OtStatusCacheService extends CacheService<OtStatusResource> {
 
-    public static final String MODEL = OTStatus.class.getSimpleName().toLowerCase();
+    public static final String MODEL = OtStatus.class.getSimpleName().toLowerCase();
 
     @Value("${fint.consumer.compatibility.fintresource:true}")
     private boolean checkFintResourceCompatibility;
@@ -51,16 +51,16 @@ public class OTStatusCacheService extends CacheService<OTStatusResource> {
     private ConsumerProps props;
 
     @Autowired
-    private OTStatusLinker linker;
+    private OtStatusLinker linker;
 
     private JavaType javaType;
 
     private ObjectMapper objectMapper;
 
-    public OTStatusCacheService() {
+    public OtStatusCacheService() {
         super(MODEL, KodeverkActions.GET_ALL_OTSTATUS, KodeverkActions.UPDATE_OTSTATUS);
         objectMapper = new ObjectMapper();
-        javaType = objectMapper.getTypeFactory().constructCollectionType(List.class, OTStatusResource.class);
+        javaType = objectMapper.getTypeFactory().constructCollectionType(List.class, OtStatusResource.class);
         objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
     }
 
@@ -81,17 +81,17 @@ public class OTStatusCacheService extends CacheService<OTStatusResource> {
 
     @Override
     public void populateCache(String orgId) {
-		log.info("Populating OTStatus cache for {}", orgId);
+		log.info("Populating OtStatus cache for {}", orgId);
         Event event = new Event(orgId, Constants.COMPONENT, KodeverkActions.GET_ALL_OTSTATUS, Constants.CACHE_SERVICE);
         consumerEventUtil.send(event);
     }
 
 
-    public Optional<OTStatusResource> getOTStatusBySystemId(String orgId, String systemId) {
+    public Optional<OtStatusResource> getOtStatusBySystemId(String orgId, String systemId) {
         return getOne(orgId, systemId.hashCode(),
             (resource) -> Optional
                 .ofNullable(resource)
-                .map(OTStatusResource::getSystemId)
+                .map(OtStatusResource::getSystemId)
                 .map(Identifikator::getIdentifikatorverdi)
                 .map(systemId::equals)
                 .orElse(false));
@@ -100,17 +100,17 @@ public class OTStatusCacheService extends CacheService<OTStatusResource> {
 
 	@Override
     public void onAction(Event event) {
-        List<OTStatusResource> data;
+        List<OtStatusResource> data;
         if (checkFintResourceCompatibility && fintResourceCompatibility.isFintResourceData(event.getData())) {
-            log.info("Compatibility: Converting FintResource<OTStatusResource> to OTStatusResource ...");
-            data = fintResourceCompatibility.convertResourceData(event.getData(), OTStatusResource.class);
+            log.info("Compatibility: Converting FintResource<OtStatusResource> to OtStatusResource ...");
+            data = fintResourceCompatibility.convertResourceData(event.getData(), OtStatusResource.class);
         } else {
             data = objectMapper.convertValue(event.getData(), javaType);
         }
         data.forEach(linker::mapLinks);
         if (KodeverkActions.valueOf(event.getAction()) == KodeverkActions.UPDATE_OTSTATUS) {
             if (event.getResponseStatus() == ResponseStatus.ACCEPTED || event.getResponseStatus() == ResponseStatus.CONFLICT) {
-                List<CacheObject<OTStatusResource>> cacheObjects = data
+                List<CacheObject<OtStatusResource>> cacheObjects = data
                     .stream()
                     .map(i -> new CacheObject<>(i, linker.hashCodes(i)))
                     .collect(Collectors.toList());
@@ -120,7 +120,7 @@ public class OTStatusCacheService extends CacheService<OTStatusResource> {
                 log.debug("Ignoring payload for {} with response status {}", event.getOrgId(), event.getResponseStatus());
             }
         } else {
-            List<CacheObject<OTStatusResource>> cacheObjects = data
+            List<CacheObject<OtStatusResource>> cacheObjects = data
                     .stream()
                     .map(i -> new CacheObject<>(i, linker.hashCodes(i)))
                     .collect(Collectors.toList());
