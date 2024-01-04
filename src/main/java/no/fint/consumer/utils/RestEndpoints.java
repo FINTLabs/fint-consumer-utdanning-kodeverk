@@ -8,6 +8,7 @@ public enum RestEndpoints {
 	public static final String EKSAMENSFORM = "/eksamensform";
 	public static final String ELEVKATEGORI = "/elevkategori";
 	public static final String FAGMERKNAD = "/fagmerknad";
+	public static final String FAGSTATUS = "/fagstatus";
 	public static final String FRAVARSTYPE = "/fravarstype";
 	public static final String KARAKTERSKALA = "/karakterskala";
 	public static final String KARAKTERSTATUS = "/karakterstatus";
