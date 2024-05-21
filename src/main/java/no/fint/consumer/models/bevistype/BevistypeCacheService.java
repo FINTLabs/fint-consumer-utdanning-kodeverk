@@ -1,4 +1,4 @@
-package no.fint.consumer.models.karakterstatus;
+package no.fint.consumer.models.bevistype;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,17 +26,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import no.fint.model.utdanning.kodeverk.Karakterstatus;
-import no.fint.model.resource.utdanning.kodeverk.KarakterstatusResource;
+import no.fint.model.utdanning.kodeverk.Bevistype;
+import no.fint.model.resource.utdanning.kodeverk.BevistypeResource;
 import no.fint.model.utdanning.kodeverk.KodeverkActions;
 import no.fint.model.felles.kompleksedatatyper.Identifikator;
 
 @Slf4j
 @Service
-@ConditionalOnProperty(name = "fint.consumer.cache.disabled.karakterstatus", havingValue = "false", matchIfMissing = true)
-public class KarakterstatusCacheService extends CacheService<KarakterstatusResource> {
+@ConditionalOnProperty(name = "fint.consumer.cache.disabled.bevistype", havingValue = "false", matchIfMissing = true)
+public class BevistypeCacheService extends CacheService<BevistypeResource> {
 
-    public static final String MODEL = Karakterstatus.class.getSimpleName().toLowerCase();
+    public static final String MODEL = Bevistype.class.getSimpleName().toLowerCase();
 
     @Value("${fint.consumer.compatibility.fintresource:true}")
     private boolean checkFintResourceCompatibility;
@@ -51,16 +51,16 @@ public class KarakterstatusCacheService extends CacheService<KarakterstatusResou
     private ConsumerProps props;
 
     @Autowired
-    private KarakterstatusLinker linker;
+    private BevistypeLinker linker;
 
     private JavaType javaType;
 
     private ObjectMapper objectMapper;
 
-    public KarakterstatusCacheService() {
-        super(MODEL, KodeverkActions.GET_ALL_KARAKTERSTATUS, KodeverkActions.UPDATE_KARAKTERSTATUS);
+    public BevistypeCacheService() {
+        super(MODEL, KodeverkActions.GET_ALL_BEVISTYPE, KodeverkActions.UPDATE_BEVISTYPE);
         objectMapper = new ObjectMapper();
-        javaType = objectMapper.getTypeFactory().constructCollectionType(List.class, KarakterstatusResource.class);
+        javaType = objectMapper.getTypeFactory().constructCollectionType(List.class, BevistypeResource.class);
         objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
     }
 
@@ -69,7 +69,7 @@ public class KarakterstatusCacheService extends CacheService<KarakterstatusResou
         props.getAssets().forEach(this::createCache);
     }
 
-    @Scheduled(initialDelayString = Constants.CACHE_INITIALDELAY_KARAKTERSTATUS, fixedRateString = Constants.CACHE_FIXEDRATE_KARAKTERSTATUS)
+    @Scheduled(initialDelayString = Constants.CACHE_INITIALDELAY_BEVISTYPE, fixedRateString = Constants.CACHE_FIXEDRATE_BEVISTYPE)
     public void populateCacheAll() {
         props.getAssets().forEach(this::populateCache);
     }
@@ -81,17 +81,17 @@ public class KarakterstatusCacheService extends CacheService<KarakterstatusResou
 
     @Override
     public void populateCache(String orgId) {
-		log.info("Populating Karakterstatus cache for {}", orgId);
-        Event event = new Event(orgId, Constants.COMPONENT, KodeverkActions.GET_ALL_KARAKTERSTATUS, Constants.CACHE_SERVICE);
+		log.info("Populating Bevistype cache for {}", orgId);
+        Event event = new Event(orgId, Constants.COMPONENT, KodeverkActions.GET_ALL_BEVISTYPE, Constants.CACHE_SERVICE);
         consumerEventUtil.send(event);
     }
 
 
-    public Optional<KarakterstatusResource> getKarakterstatusBySystemId(String orgId, String systemId) {
+    public Optional<BevistypeResource> getBevistypeBySystemId(String orgId, String systemId) {
         return getOne(orgId, systemId.hashCode(),
             (resource) -> Optional
                 .ofNullable(resource)
-                .map(KarakterstatusResource::getSystemId)
+                .map(BevistypeResource::getSystemId)
                 .map(Identifikator::getIdentifikatorverdi)
                 .map(systemId::equals)
                 .orElse(false));
@@ -100,17 +100,17 @@ public class KarakterstatusCacheService extends CacheService<KarakterstatusResou
 
 	@Override
     public void onAction(Event event) {
-        List<KarakterstatusResource> data;
+        List<BevistypeResource> data;
         if (checkFintResourceCompatibility && fintResourceCompatibility.isFintResourceData(event.getData())) {
-            log.info("Compatibility: Converting FintResource<KarakterstatusResource> to KarakterstatusResource ...");
-            data = fintResourceCompatibility.convertResourceData(event.getData(), KarakterstatusResource.class);
+            log.info("Compatibility: Converting FintResource<BevistypeResource> to BevistypeResource ...");
+            data = fintResourceCompatibility.convertResourceData(event.getData(), BevistypeResource.class);
         } else {
             data = objectMapper.convertValue(event.getData(), javaType);
         }
         data.forEach(linker::mapLinks);
-        if (KodeverkActions.valueOf(event.getAction()) == KodeverkActions.UPDATE_KARAKTERSTATUS) {
+        if (KodeverkActions.valueOf(event.getAction()) == KodeverkActions.UPDATE_BEVISTYPE) {
             if (event.getResponseStatus() == ResponseStatus.ACCEPTED || event.getResponseStatus() == ResponseStatus.CONFLICT) {
-                List<CacheObject<KarakterstatusResource>> cacheObjects = data
+                List<CacheObject<BevistypeResource>> cacheObjects = data
                     .stream()
                     .map(i -> new CacheObject<>(i, linker.hashCodes(i)))
                     .collect(Collectors.toList());
@@ -120,7 +120,7 @@ public class KarakterstatusCacheService extends CacheService<KarakterstatusResou
                 log.debug("Ignoring payload for {} with response status {}", event.getOrgId(), event.getResponseStatus());
             }
         } else {
-            List<CacheObject<KarakterstatusResource>> cacheObjects = data
+            List<CacheObject<BevistypeResource>> cacheObjects = data
                     .stream()
                     .map(i -> new CacheObject<>(i, linker.hashCodes(i)))
                     .collect(Collectors.toList());
