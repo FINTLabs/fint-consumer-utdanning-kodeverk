@@ -182,7 +182,7 @@ public class OtStatusController {
 
             fintAuditService.audit(response, Status.SENT_TO_CLIENT);
 
-            return linker.toResource(otstatus);
+            return linker.mapAndResetLinks(otstatus);
         }    
     }
 

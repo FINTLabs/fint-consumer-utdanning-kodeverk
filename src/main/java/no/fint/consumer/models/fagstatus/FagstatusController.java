@@ -182,7 +182,7 @@ public class FagstatusController {
 
             fintAuditService.audit(response, Status.SENT_TO_CLIENT);
 
-            return linker.toResource(fagstatus);
+            return linker.mapAndResetLinks(fagstatus);
         }    
     }
 

@@ -182,7 +182,7 @@ public class BetalingsstatusController {
 
             fintAuditService.audit(response, Status.SENT_TO_CLIENT);
 
-            return linker.toResource(betalingsstatus);
+            return linker.mapAndResetLinks(betalingsstatus);
         }    
     }
 

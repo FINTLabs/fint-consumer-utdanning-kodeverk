@@ -182,7 +182,7 @@ public class FagmerknadController {
 
             fintAuditService.audit(response, Status.SENT_TO_CLIENT);
 
-            return linker.toResource(fagmerknad);
+            return linker.mapAndResetLinks(fagmerknad);
         }    
     }
 

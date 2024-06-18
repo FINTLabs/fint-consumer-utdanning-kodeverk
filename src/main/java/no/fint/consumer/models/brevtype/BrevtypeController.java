@@ -182,7 +182,7 @@ public class BrevtypeController {
 
             fintAuditService.audit(response, Status.SENT_TO_CLIENT);
 
-            return linker.toResource(brevtype);
+            return linker.mapAndResetLinks(brevtype);
         }    
     }
 

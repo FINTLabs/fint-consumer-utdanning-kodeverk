@@ -182,7 +182,7 @@ public class ProvestatusController {
 
             fintAuditService.audit(response, Status.SENT_TO_CLIENT);
 
-            return linker.toResource(provestatus);
+            return linker.mapAndResetLinks(provestatus);
         }    
     }
 

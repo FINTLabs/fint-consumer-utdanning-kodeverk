@@ -182,7 +182,7 @@ public class SkoleeiertypeController {
 
             fintAuditService.audit(response, Status.SENT_TO_CLIENT);
 
-            return linker.toResource(skoleeiertype);
+            return linker.mapAndResetLinks(skoleeiertype);
         }    
     }
 
