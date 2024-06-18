@@ -182,7 +182,7 @@ public class TerminController {
 
             fintAuditService.audit(response, Status.SENT_TO_CLIENT);
 
-            return linker.toResource(termin);
+            return linker.mapAndResetLinks(termin);
         }    
     }
 

@@ -182,7 +182,7 @@ public class FullfortkodeController {
 
             fintAuditService.audit(response, Status.SENT_TO_CLIENT);
 
-            return linker.toResource(fullfortkode);
+            return linker.mapAndResetLinks(fullfortkode);
         }    
     }
 

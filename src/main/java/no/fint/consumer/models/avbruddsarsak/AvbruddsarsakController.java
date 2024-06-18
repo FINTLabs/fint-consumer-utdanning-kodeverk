@@ -182,7 +182,7 @@ public class AvbruddsarsakController {
 
             fintAuditService.audit(response, Status.SENT_TO_CLIENT);
 
-            return linker.toResource(avbruddsarsak);
+            return linker.mapAndResetLinks(avbruddsarsak);
         }    
     }
 

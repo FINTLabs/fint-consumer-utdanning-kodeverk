@@ -182,7 +182,7 @@ public class VarseltypeController {
 
             fintAuditService.audit(response, Status.SENT_TO_CLIENT);
 
-            return linker.toResource(varseltype);
+            return linker.mapAndResetLinks(varseltype);
         }    
     }
 
