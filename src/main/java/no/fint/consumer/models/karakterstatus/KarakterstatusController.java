@@ -182,7 +182,7 @@ public class KarakterstatusController {
 
             fintAuditService.audit(response, Status.SENT_TO_CLIENT);
 
-            return linker.toResource(karakterstatus);
+            return linker.mapAndResetLinks(karakterstatus);
         }    
     }
 

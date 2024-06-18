@@ -182,7 +182,7 @@ public class ElevkategoriController {
 
             fintAuditService.audit(response, Status.SENT_TO_CLIENT);
 
-            return linker.toResource(elevkategori);
+            return linker.mapAndResetLinks(elevkategori);
         }    
     }
 

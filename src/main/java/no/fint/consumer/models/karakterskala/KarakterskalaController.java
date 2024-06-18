@@ -182,7 +182,7 @@ public class KarakterskalaController {
 
             fintAuditService.audit(response, Status.SENT_TO_CLIENT);
 
-            return linker.toResource(karakterskala);
+            return linker.mapAndResetLinks(karakterskala);
         }    
     }
 
