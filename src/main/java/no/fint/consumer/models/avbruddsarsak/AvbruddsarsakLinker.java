@@ -1,7 +1,7 @@
 package no.fint.consumer.models.avbruddsarsak;
 
-import no.fint.model.resource.utdanning.kodeverk.AvbruddsarsakResource;
-import no.fint.model.resource.utdanning.kodeverk.AvbruddsarsakResources;
+import no.novari.fint.model.resource.utdanning.kodeverk.AvbruddsarsakResource;
+import no.novari.fint.model.resource.utdanning.kodeverk.AvbruddsarsakResources;
 import no.fint.relations.FintLinker;
 import org.springframework.stereotype.Component;
 

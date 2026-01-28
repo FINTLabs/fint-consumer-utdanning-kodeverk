@@ -43,9 +43,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
-import no.fint.model.resource.utdanning.kodeverk.ProvestatusResource;
-import no.fint.model.resource.utdanning.kodeverk.ProvestatusResources;
-import no.fint.model.utdanning.kodeverk.KodeverkActions;
+import no.novari.fint.model.resource.utdanning.kodeverk.ProvestatusResource;
+import no.novari.fint.model.resource.utdanning.kodeverk.ProvestatusResources;
+import no.novari.fint.model.utdanning.kodeverk.KodeverkActions;
 
 @Slf4j
 @Api(tags = {"Provestatus"})

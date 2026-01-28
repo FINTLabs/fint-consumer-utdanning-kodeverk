@@ -1,7 +1,7 @@
 package no.fint.consumer.models.vitnemalsmerknad;
 
-import no.fint.model.resource.utdanning.kodeverk.VitnemalsmerknadResource;
-import no.fint.model.resource.utdanning.kodeverk.VitnemalsmerknadResources;
+import no.novari.fint.model.resource.utdanning.kodeverk.VitnemalsmerknadResource;
+import no.novari.fint.model.resource.utdanning.kodeverk.VitnemalsmerknadResources;
 import no.fint.relations.FintLinker;
 import org.springframework.stereotype.Component;
 

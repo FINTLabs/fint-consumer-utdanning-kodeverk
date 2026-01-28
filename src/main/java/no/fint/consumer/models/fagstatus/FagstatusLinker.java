@@ -1,7 +1,7 @@
 package no.fint.consumer.models.fagstatus;
 
-import no.fint.model.resource.utdanning.kodeverk.FagstatusResource;
-import no.fint.model.resource.utdanning.kodeverk.FagstatusResources;
+import no.novari.fint.model.resource.utdanning.kodeverk.FagstatusResource;
+import no.novari.fint.model.resource.utdanning.kodeverk.FagstatusResources;
 import no.fint.relations.FintLinker;
 import org.springframework.stereotype.Component;
 

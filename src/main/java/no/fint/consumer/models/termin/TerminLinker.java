@@ -1,7 +1,7 @@
 package no.fint.consumer.models.termin;
 
-import no.fint.model.resource.utdanning.kodeverk.TerminResource;
-import no.fint.model.resource.utdanning.kodeverk.TerminResources;
+import no.novari.fint.model.resource.utdanning.kodeverk.TerminResource;
+import no.novari.fint.model.resource.utdanning.kodeverk.TerminResources;
 import no.fint.relations.FintLinker;
 import org.springframework.stereotype.Component;
 

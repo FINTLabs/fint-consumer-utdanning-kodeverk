@@ -1,7 +1,7 @@
 package no.fint.consumer.models.fravarstype;
 
-import no.fint.model.resource.utdanning.kodeverk.FravarstypeResource;
-import no.fint.model.resource.utdanning.kodeverk.FravarstypeResources;
+import no.novari.fint.model.resource.utdanning.kodeverk.FravarstypeResource;
+import no.novari.fint.model.resource.utdanning.kodeverk.FravarstypeResources;
 import no.fint.relations.FintLinker;
 import org.springframework.stereotype.Component;
 

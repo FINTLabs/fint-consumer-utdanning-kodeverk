@@ -1,7 +1,7 @@
 package no.fint.consumer.models.karakterstatus;
 
-import no.fint.model.resource.utdanning.kodeverk.KarakterstatusResource;
-import no.fint.model.resource.utdanning.kodeverk.KarakterstatusResources;
+import no.novari.fint.model.resource.utdanning.kodeverk.KarakterstatusResource;
+import no.novari.fint.model.resource.utdanning.kodeverk.KarakterstatusResources;
 import no.fint.relations.FintLinker;
 import org.springframework.stereotype.Component;
 

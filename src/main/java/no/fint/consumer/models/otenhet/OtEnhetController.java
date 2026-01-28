@@ -43,9 +43,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
-import no.fint.model.resource.utdanning.kodeverk.OtEnhetResource;
-import no.fint.model.resource.utdanning.kodeverk.OtEnhetResources;
-import no.fint.model.utdanning.kodeverk.KodeverkActions;
+import no.novari.fint.model.resource.utdanning.kodeverk.OtEnhetResource;
+import no.novari.fint.model.resource.utdanning.kodeverk.OtEnhetResources;
+import no.novari.fint.model.utdanning.kodeverk.KodeverkActions;
 
 @Slf4j
 @Api(tags = {"OtEnhet"})

@@ -3,27 +3,27 @@ package no.fint.consumer.config;
 import no.fint.consumer.utils.RestEndpoints;
 import java.util.Map;
 import com.google.common.collect.ImmutableMap;
-import no.fint.model.utdanning.kodeverk.Avbruddsarsak;
-import no.fint.model.utdanning.kodeverk.Betalingsstatus;
-import no.fint.model.utdanning.kodeverk.Bevistype;
-import no.fint.model.utdanning.kodeverk.Brevtype;
-import no.fint.model.utdanning.kodeverk.Eksamensform;
-import no.fint.model.utdanning.kodeverk.Elevkategori;
-import no.fint.model.utdanning.kodeverk.Fagmerknad;
-import no.fint.model.utdanning.kodeverk.Fagstatus;
-import no.fint.model.utdanning.kodeverk.Fravarstype;
-import no.fint.model.utdanning.kodeverk.Fullfortkode;
-import no.fint.model.utdanning.kodeverk.Karakterskala;
-import no.fint.model.utdanning.kodeverk.Karakterstatus;
-import no.fint.model.utdanning.kodeverk.OtEnhet;
-import no.fint.model.utdanning.kodeverk.OtStatus;
-import no.fint.model.utdanning.kodeverk.Provestatus;
-import no.fint.model.utdanning.kodeverk.Skolear;
-import no.fint.model.utdanning.kodeverk.Skoleeiertype;
-import no.fint.model.utdanning.kodeverk.Termin;
-import no.fint.model.utdanning.kodeverk.Tilrettelegging;
-import no.fint.model.utdanning.kodeverk.Varseltype;
-import no.fint.model.utdanning.kodeverk.Vitnemalsmerknad;
+import no.novari.fint.model.utdanning.kodeverk.Avbruddsarsak;
+import no.novari.fint.model.utdanning.kodeverk.Betalingsstatus;
+import no.novari.fint.model.utdanning.kodeverk.Bevistype;
+import no.novari.fint.model.utdanning.kodeverk.Brevtype;
+import no.novari.fint.model.utdanning.kodeverk.Eksamensform;
+import no.novari.fint.model.utdanning.kodeverk.Elevkategori;
+import no.novari.fint.model.utdanning.kodeverk.Fagmerknad;
+import no.novari.fint.model.utdanning.kodeverk.Fagstatus;
+import no.novari.fint.model.utdanning.kodeverk.Fravarstype;
+import no.novari.fint.model.utdanning.kodeverk.Fullfortkode;
+import no.novari.fint.model.utdanning.kodeverk.Karakterskala;
+import no.novari.fint.model.utdanning.kodeverk.Karakterstatus;
+import no.novari.fint.model.utdanning.kodeverk.OtEnhet;
+import no.novari.fint.model.utdanning.kodeverk.OtStatus;
+import no.novari.fint.model.utdanning.kodeverk.Provestatus;
+import no.novari.fint.model.utdanning.kodeverk.Skolear;
+import no.novari.fint.model.utdanning.kodeverk.Skoleeiertype;
+import no.novari.fint.model.utdanning.kodeverk.Termin;
+import no.novari.fint.model.utdanning.kodeverk.Tilrettelegging;
+import no.novari.fint.model.utdanning.kodeverk.Varseltype;
+import no.novari.fint.model.utdanning.kodeverk.Vitnemalsmerknad;
 
 public class LinkMapper {
 
@@ -50,8 +50,8 @@ public class LinkMapper {
             .put(Tilrettelegging.class.getName(), contextPath + RestEndpoints.TILRETTELEGGING)
             .put(Varseltype.class.getName(), contextPath + RestEndpoints.VARSELTYPE)
             .put(Vitnemalsmerknad.class.getName(), contextPath + RestEndpoints.VITNEMALSMERKNAD)
-            .put("no.fint.model.utdanning.vurdering.Karakterverdi", "/utdanning/vurdering/karakterverdi")
-            .put("no.fint.model.felles.kodeverk.Kommune", "/felles/kodeverk/kommune")
+            .put("no.novari.fint.model.utdanning.vurdering.Karakterverdi", "/utdanning/vurdering/karakterverdi")
+            .put("no.novari.fint.model.felles.kodeverk.Kommune", "/felles/kodeverk/kommune")
             /* .put(TODO,TODO) */
             .build();
     }

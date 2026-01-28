@@ -1,7 +1,7 @@
 package no.fint.consumer.models.betalingsstatus;
 
-import no.fint.model.resource.utdanning.kodeverk.BetalingsstatusResource;
-import no.fint.model.resource.utdanning.kodeverk.BetalingsstatusResources;
+import no.novari.fint.model.resource.utdanning.kodeverk.BetalingsstatusResource;
+import no.novari.fint.model.resource.utdanning.kodeverk.BetalingsstatusResources;
 import no.fint.relations.FintLinker;
 import org.springframework.stereotype.Component;
 

@@ -1,7 +1,7 @@
 package no.fint.consumer.models.otenhet;
 
-import no.fint.model.resource.utdanning.kodeverk.OtEnhetResource;
-import no.fint.model.resource.utdanning.kodeverk.OtEnhetResources;
+import no.novari.fint.model.resource.utdanning.kodeverk.OtEnhetResource;
+import no.novari.fint.model.resource.utdanning.kodeverk.OtEnhetResources;
 import no.fint.relations.FintLinker;
 import org.springframework.stereotype.Component;
 

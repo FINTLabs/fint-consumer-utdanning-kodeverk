@@ -1,7 +1,7 @@
 package no.fint.consumer.models.skolear;
 
-import no.fint.model.resource.utdanning.kodeverk.SkolearResource;
-import no.fint.model.resource.utdanning.kodeverk.SkolearResources;
+import no.novari.fint.model.resource.utdanning.kodeverk.SkolearResource;
+import no.novari.fint.model.resource.utdanning.kodeverk.SkolearResources;
 import no.fint.relations.FintLinker;
 import org.springframework.stereotype.Component;
 

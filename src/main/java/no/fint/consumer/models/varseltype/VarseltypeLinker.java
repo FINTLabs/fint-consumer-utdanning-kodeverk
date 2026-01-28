@@ -1,7 +1,7 @@
 package no.fint.consumer.models.varseltype;
 
-import no.fint.model.resource.utdanning.kodeverk.VarseltypeResource;
-import no.fint.model.resource.utdanning.kodeverk.VarseltypeResources;
+import no.novari.fint.model.resource.utdanning.kodeverk.VarseltypeResource;
+import no.novari.fint.model.resource.utdanning.kodeverk.VarseltypeResources;
 import no.fint.relations.FintLinker;
 import org.springframework.stereotype.Component;
 

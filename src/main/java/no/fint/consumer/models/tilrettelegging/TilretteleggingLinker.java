@@ -1,7 +1,7 @@
 package no.fint.consumer.models.tilrettelegging;
 
-import no.fint.model.resource.utdanning.kodeverk.TilretteleggingResource;
-import no.fint.model.resource.utdanning.kodeverk.TilretteleggingResources;
+import no.novari.fint.model.resource.utdanning.kodeverk.TilretteleggingResource;
+import no.novari.fint.model.resource.utdanning.kodeverk.TilretteleggingResources;
 import no.fint.relations.FintLinker;
 import org.springframework.stereotype.Component;
 

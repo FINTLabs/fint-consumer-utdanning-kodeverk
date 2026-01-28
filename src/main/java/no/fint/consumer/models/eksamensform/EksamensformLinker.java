@@ -1,7 +1,7 @@
 package no.fint.consumer.models.eksamensform;
 
-import no.fint.model.resource.utdanning.kodeverk.EksamensformResource;
-import no.fint.model.resource.utdanning.kodeverk.EksamensformResources;
+import no.novari.fint.model.resource.utdanning.kodeverk.EksamensformResource;
+import no.novari.fint.model.resource.utdanning.kodeverk.EksamensformResources;
 import no.fint.relations.FintLinker;
 import org.springframework.stereotype.Component;
 

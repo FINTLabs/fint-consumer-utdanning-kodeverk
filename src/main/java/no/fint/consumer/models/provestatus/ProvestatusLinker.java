@@ -1,7 +1,7 @@
 package no.fint.consumer.models.provestatus;
 
-import no.fint.model.resource.utdanning.kodeverk.ProvestatusResource;
-import no.fint.model.resource.utdanning.kodeverk.ProvestatusResources;
+import no.novari.fint.model.resource.utdanning.kodeverk.ProvestatusResource;
+import no.novari.fint.model.resource.utdanning.kodeverk.ProvestatusResources;
 import no.fint.relations.FintLinker;
 import org.springframework.stereotype.Component;
 
