@@ -50,8 +50,8 @@ public class LinkMapper {
             .put(Tilrettelegging.class.getName(), contextPath + RestEndpoints.TILRETTELEGGING)
             .put(Varseltype.class.getName(), contextPath + RestEndpoints.VARSELTYPE)
             .put(Vitnemalsmerknad.class.getName(), contextPath + RestEndpoints.VITNEMALSMERKNAD)
-            .put("no.novari.fint.model.utdanning.vurdering.Karakterverdi", "/utdanning/vurdering/karakterverdi")
-            .put("no.novari.fint.model.felles.kodeverk.Kommune", "/felles/kodeverk/kommune")
+            .put("no.novari.fint.model.utdanning.vurdering.Karakterverdi", "/model/utdanning/vurdering/karakterverdi")
+            .put("no.novari.fint.model.felles.kodeverk.Kommune", "/model/felles/kodeverk/kommune")
             /* .put(TODO,TODO) */
             .build();
     }
